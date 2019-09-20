@@ -15,6 +15,10 @@ public class PlayerMovement : MonoBehaviour
 
     private int sneakingBool;
 
+    private Vector2 EasyTouchCtl;
+    private bool isEasyTouchShift;
+    private bool isEasyTouchShoot;
+
 
     // Start is called before the first frame update
     void Start()
@@ -35,10 +39,19 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+#if UNITY_ANDROID
+        float h = EasyTouchCtl.x;
+        float v = EasyTouchCtl.y;
+        bool sneak = isEasyTouchShift;
+        bool shout = isEasyTouchShoot;
+        if (shout)
+            isEasyTouchShoot = false;
+#else
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
         bool sneak = Input.GetButton("Sneak");   //如果要判断按键是否按下，GetButton就可，要按按下的值要用GetAxis
         bool shout = Input.GetButtonDown("Attract");
+#endif
 
         animator.SetBool("Shouting", shout);
 
@@ -82,5 +95,40 @@ public class PlayerMovement : MonoBehaviour
             rigidbody.MoveRotation(currentQuaternion);
 
         }
+    }
+
+
+    public void EasyTouchStat()
+    {
+        EasyTouchCtl = Vector2.zero;
+    }
+    public void EasyTouchMove(Vector2 vector)
+    {
+        EasyTouchCtl = vector;
+    }
+
+    public void EasyTouchEnd()
+    {
+        EasyTouchCtl = Vector2.zero;
+    }
+
+    public void EasyTouchShoot()
+    {
+        isEasyTouchShoot = true;
+    }
+
+    public void EasyTouchShootDown()
+    {
+        //isEasyTouchShoot = false;
+    }
+
+    public void EasyTouchShift()
+    {
+        isEasyTouchShift = true;
+    }
+
+    public void EasyTouchShiftDown()
+    {
+        isEasyTouchShift = false;
     }
 }

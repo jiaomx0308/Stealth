@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DoorAnimation : MonoBehaviour
 {
@@ -13,12 +14,15 @@ public class DoorAnimation : MonoBehaviour
     private AudioSource audioSource;
     private int cout;
 
+    private GameObject tipsText;
+
 
     // Start is called before the first frame update
     void Start()
     {
         animator = this.GetComponent<Animator>();
         audioSource = this.GetComponent<AudioSource>();
+        tipsText = this.transform.root.Find("EasyTouchControlsCanvas/tipsText").gameObject;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -31,6 +35,8 @@ public class DoorAnimation : MonoBehaviour
                 {
                     audioSource.clip = accessDeniedClip;
                     audioSource.Play();
+                    tipsText.GetComponent<Text>().text = "You must find a key to open the door!";
+                    tipsText.SetActive(true);
                     return;
                 }
           
